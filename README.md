@@ -1,6 +1,6 @@
 # templates-jqwik-test
 
-Simple test template for Java 11 / JQwik / JUnit / Cofoja / JavaFX projects.
+Simple test template for Java 11 / JQwik / JUnit / JavaFX projects.
 
 ## Requirements
 

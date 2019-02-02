@@ -12,7 +12,7 @@
 // JAVAFX_HOME -- where to look for JavaFX (10/11)
 
 // Project name
-name := "fxhello"
+name := "hellofxidea"
 
 // organization name
 organization := "fi.utu"
@@ -76,13 +76,16 @@ resolvers += "utujemma" at "http://users.utu.fi/jmjmak/repository/"
 // library dependencies. (orginization name) % (project name) % (version)
 // jqwik 0.8.15 still depends on old junit
 libraryDependencies ++= Seq(
-  "org.junit.platform" % "junit-platform-commons"         % "1.2.0",
-  "org.junit.platform" % "junit-platform-runner"          % "1.2.0",
-  "org.junit.jupiter"  % "junit-jupiter-engine"           % "5.2.0",
-  "org.junit.jupiter"  % "junit-jupiter-api"              % "5.2.0",
-  "org.junit.jupiter"  % "junit-jupiter-migrationsupport" % "5.2.0",
-  "org.junit.jupiter"  % "junit-jupiter-params"           % "5.2.0",
-  "net.jqwik"          % "jqwik"                          % "0.8.15"
+  "net.aichler"        % "jupiter-interface"              % JupiterKeys.jupiterVersion.value % Test,
+  "org.junit.platform" % "junit-platform-commons"         % "1.3.2",
+  "org.junit.platform" % "junit-platform-runner"          % "1.3.2",
+  "org.junit.jupiter"  % "junit-jupiter-engine"           % "5.3.2",
+  "org.junit.jupiter"  % "junit-jupiter-api"              % "5.3.2",
+  "org.junit.jupiter"  % "junit-jupiter-migrationsupport" % "5.3.2",
+  "org.junit.jupiter"  % "junit-jupiter-params"           % "5.3.2",
+  "net.jqwik"          % "jqwik"                          % "1.0.0",
+  "io.cucumber"        % "cucumber-junit"                 % "4.2.2",
+  "org.scalatest"      %% "scalatest"                     % "3.0.5" % "test"
 )
 
 testOptions += Tests.Argument(TestFrameworks.JUnit, "-q", "-c")
@@ -138,6 +141,8 @@ def legacyJavaFX(jfxVersion: Int, badVersions: Seq[Int]) = {
   }
 }
 
+val jfx_version = "11.0.2"
+
 val javaFxPath = Def.taskKey[File]("OpenJFX fetcher")
 javaFxPath := {
   try {
@@ -152,11 +157,13 @@ javaFxPath := {
       val dir = baseDirectory.value / "openjfx"
       if (!dir.exists()) java.nio.file.Files.createDirectory(dir.toPath)
 
-      val sdkURL = "http://download2.gluonhq.com/openjfx/11/openjfx-11_" + (osName.value match {
+      val jfx_os = osName.value match {
         case "linux" => "linux"
         case "mac"   => "osx"
         case "win"   => "windows"
-      }) + "-x64_bin-sdk.zip"
+      }
+
+      val sdkURL = "http://download2.gluonhq.com/openjfx/" + jfx_version + "/openjfx-" + jfx_version + "_" + jfx_os + "-x64_bin-sdk.zip"
 
       try {
         val testDir = dir / "all.ok"
@@ -189,7 +196,7 @@ javafx_version match {
   case 11 =>
     Seq(
       javaOptions ++= Seq(
-        "--module-path", (javaFxPath.value / "javafx-sdk-11" / "lib").toString,
+        "--module-path", (javaFxPath.value / ("javafx-sdk-" + jfx_version) / "lib").toString,
         "--add-modules=javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.media,javafx.swing,javafx.web"),
 
       libraryDependencies ++= Seq(

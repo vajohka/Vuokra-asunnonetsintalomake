@@ -1,0 +1,8 @@
+image: "hseeberger/scala-sbt:11.0.1_2.12.8_1.2.7"
+
+stages:
+  - test
+
+test:
+  script:
+    - sbt test
