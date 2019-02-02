@@ -195,7 +195,7 @@ javafx_version match {
     )
   case 11 =>
     Seq(
-      javaOptions ++= Seq(
+      javaOptions in run ++= Seq(
         "--module-path", (javaFxPath.value / ("javafx-sdk-" + jfx_version) / "lib").toString,
         "--add-modules=javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.media,javafx.swing,javafx.web"),
 
